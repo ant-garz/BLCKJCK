@@ -1,4 +1,4 @@
-import java.util.Random;
+import java.lang.Math;
 
 public class CardDeck {
     private Cards[] cardDeck;
@@ -12,26 +12,27 @@ public class CardDeck {
 
         //populate the cardDeck with all cards
         //assigns suit to cards being created
-        for (int cardSuit = 0; cardSuit < 4; cardSuit++) {
+        for (int cardSuit = 0; cardSuit <= 3; cardSuit++) {
             //assigns value of card being created
-            for (int cardValue = 0; cardValue < 14; cardValue++) {
+            for (int cardValue = 1; cardValue <= 13; cardValue++) {
                 cardDeck[counter] = new Cards(cardValue, cardSuit);
                 counter++;
             }
         }
         //aka starting off with a full deck of cards
         dealtCards = 0;
+        shuffleDeck();
    }
 
    //method to shuffle up the deck. number integer must always be 52, but that is placed in elsewhere.
    public void shuffleDeck() {
-       Random randomizer = new Random();
-        for (int i = 0; i < cardDeck.length; i++) {
-            int randNum = randomizer.nextInt(52 + 1);
-            Cards placeHolder = cardDeck[i];
-            cardDeck[i] = cardDeck[randNum];
+        for ( int card = 51; card > 0; card-- ) {
+            int randNum = (int)(Math.random()*(card+1));
+            Cards placeHolder = cardDeck[card];
+            cardDeck[card] = cardDeck[randNum];
             cardDeck[randNum] = placeHolder;
         }
+        dealtCards = 0;
    }
 
    //method to deal cards from the deck
