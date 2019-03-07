@@ -14,7 +14,7 @@ public class Cards {
                 
     //card properties needed for creating card object
     private final int cardSuit;           
-    private final int cardValue;
+    private int cardValue;
               
     //non-default constructor for a card, must know it's value from 1-10 (aces will count as 1 no matter what) and what suit it is.
     public Cards(int cardValueIn, int cardSuitIn) {
