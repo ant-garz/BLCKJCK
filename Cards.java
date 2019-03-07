@@ -1,3 +1,7 @@
+/**
+ * this is the Cards.java file for my BLCKJCK implementation. Used by CardDeck to create a deck of Card Objects for use in GameFrame.
+ */
+
 public class Cards {
 
     // nuemric values for the 4 suits. Will use later to determine what card is drawn.
@@ -22,17 +26,19 @@ public class Cards {
         cardSuit = cardSuitIn;
     }
 
+    //getter for cards value 1-13 (11-13 get trimmed to 10 in GameFrame)
     public int getCardValue() {
-        // Return the int that codes for this card's value.
+        // Return the cards numeric value
         return cardValue;
     }
         
+    //getter for cards suit
     public int getCardSuit() {
-            // Return the int that codes for this card's suit.
+        //Return the int that codes for this card's suit.
         return cardSuit;
     }
     
-    //checks what the card suit is numerically and returns it's string equivalent to be printed to GUI. Not best practice but effective.
+    //checks what the card suit is numerically and returns it's string equivalent to be printed to GUI.
     public String getCardSuitString() {
         if (cardSuit == 0){
             return "Clubs";
@@ -51,7 +57,7 @@ public class Cards {
         }
     }
     
-    //checks what the card value is numerically and returns it's string equivalent to be printed to GUI. Not best practice but effective.
+    //checks what the card value is numerically and returns it's string equivalent to be printed to GUI.
     public String getCardValueString() {
         if (cardValue == 1){
             return "Ace";

@@ -1,3 +1,8 @@
+/**
+ * this is the GameFrame.java file for my BLCKJCK implementation. Main driving force for this project. Creates the GUI and also utilizes 
+ * Cards.java, CardDeck.java, and Person.java to create the Dealer, Player, and deck of Cards Objects. Main Logic for gameplay included in this file.
+ */
+
 import javax.swing.JFrame;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -40,10 +45,13 @@ public class GameFrame extends JFrame implements ActionListener {
         player = new Person(0);
 
         //Start the Game up
+        //create card deck
         myCardDeck = new CardDeck();
+        //start by dealing two cards off the bat to dealer and player
         dealerCard = myCardDeck.dealCard();
         playerCard = myCardDeck.dealCard();
 
+        //sets proper score for dealer and player by calling cardValueChecker inside the setScore method for Persons so that the face cards become worth 10 pts
         dealer.setScore(cardValueChecker(dealerCard.getCardValue()));
         player.setScore(cardValueChecker(playerCard.getCardValue()));
         dealerDisplayScore = dealer.getScore();
@@ -54,6 +62,7 @@ public class GameFrame extends JFrame implements ActionListener {
         dealerPanel.setLayout(new BorderLayout());
         JLabel dealerHeader = new JLabel("Dealer Score:");
         dealerScore = new JLabel(String.valueOf(dealerDisplayScore));
+        //formatting for left of GUI: dealer side header on top score below
         dealerPanel.add(dealerHeader, BorderLayout.NORTH);
         dealerPanel.add(dealerScore, BorderLayout.CENTER);
         contentPane.add(dealerPanel, BorderLayout.WEST);
@@ -62,10 +71,12 @@ public class GameFrame extends JFrame implements ActionListener {
         playerPanel.setLayout(new BorderLayout());
         JLabel playerHeader = new JLabel("Player Score:");
         playerScore = new JLabel(String.valueOf(playerDisplayScore));
+        //formatting for right of GUI: player side header on top score below
         playerPanel.add(playerHeader, BorderLayout.NORTH);
         playerPanel.add(playerScore, BorderLayout.CENTER);
         contentPane.add(playerPanel, BorderLayout.EAST);
 
+        //more GUI code. panel to show game updates on who is drawing what and used to show who wins/loses
         JPanel gameStatusPanel = new JPanel();
         gameStatusPanel.setLayout(new BorderLayout());
         dealerStatus = new JLabel("Dealer drew " + dealerCard.toString());
@@ -77,15 +88,18 @@ public class GameFrame extends JFrame implements ActionListener {
 
         JPanel bottomPanel = new JPanel();
         bottomPanel.setLayout(new BorderLayout());
+        //initialize buttons
         hit = new JButton("Hit Me");
         stand = new JButton("Stand");
         //add actionListener to hit me and stand button
         hit.addActionListener(this);
         stand.addActionListener(this);
         cardsLeft = new JLabel("Cards Remaining: " + myCardDeck.remainingCards());
+
+        //formatting GUI so buttons and remaining cards all share bottom of contentPane
         bottomPanel.add(hit, BorderLayout.WEST);
-        bottomPanel.add(stand, BorderLayout.CENTER);
-        bottomPanel.add(cardsLeft, BorderLayout.EAST);
+        bottomPanel.add(stand, BorderLayout.EAST);
+        bottomPanel.add(cardsLeft, BorderLayout.CENTER);
         contentPane.add(bottomPanel, BorderLayout.SOUTH);
     }
 
@@ -97,11 +111,15 @@ public class GameFrame extends JFrame implements ActionListener {
             checkedCardValue = 10;
             return returnValue + checkedCardValue;
         }
-        else
+        else{
             return returnValue + checkedCardValue;
+        }
     }
 
+    //actionPerformed, called by each button with (this) for their listeners
     public void actionPerformed(ActionEvent event) { 
+
+        //checks to see if it was the hit button that called actionPerformed
         if (event.getSource() == hit) {
             System.out.println("Card Dealt to player");
             playerCard = myCardDeck.dealCard();
@@ -109,9 +127,10 @@ public class GameFrame extends JFrame implements ActionListener {
             playerDisplayScore = player.getScore();
             playerScore.setText("" + playerDisplayScore);
             playerStatus.setText("Player drew " + playerCard.toString());
-            cardsLeft.setText("Cards Remaining: " + myCardDeck.remainingCards());
+            cardsLeft.setText("\t\tCards Remaining: " + myCardDeck.remainingCards());
             checkFor21();
         }
+        //checks to see if it was the stand button that called actionPerformed
         if (event.getSource() == stand) {
             System.out.println("Card Dealt to Dealer");
             dealerCard = myCardDeck.dealCard();
@@ -119,17 +138,34 @@ public class GameFrame extends JFrame implements ActionListener {
             dealerDisplayScore = dealer.getScore();
             dealerScore.setText("" + dealerDisplayScore);
             dealerStatus.setText("Dealer drew " + dealerCard.toString());
-            cardsLeft.setText("Cards Remaining: " + myCardDeck.remainingCards());
+            playerStatus.setText("Player stands. Dealer automatically draws.");
+            cardsLeft.setText("\t\tCards Remaining: " + myCardDeck.remainingCards());
             checkFor21();
         }
     }
 
+    //called for end of each event (hit or stand) to see if either dealer or player wins or loses
     public void checkFor21() {
-        if (playerDisplayScore >= 21){
-            playerStatus.setText("Player Busts.");
+
+        //check if player busts
+        if (playerDisplayScore > 21){
+            playerStatus.setText("Player Busts. Game Over. Please Exit Application.");
+            dealerStatus.setText("Player Busts. Game Over. Please Exit Application.");
         }
-        else if (dealerDisplayScore >= 21) {
-            dealerStatus.setText("Dealer Busts.");
+        //check if dealer busts
+        else if (dealerDisplayScore > 21) {
+            dealerStatus.setText("Dealer Busts. You win!");
+            playerStatus.setText("Dealer Busts. You win!");
+        }
+        //check if player wins
+        else if (playerDisplayScore == 21) {
+            playerStatus.setText("Player Wins!!!");
+            dealerStatus.setText("Player Wins!!!");
+        }
+        //check if dealer wins
+        else if (dealerDisplayScore == 21) {
+            playerStatus.setText("Dealer wins. Game Over. Please Exit Application.");
+            dealerStatus.setText("Dealer wins. Game Over. Please Exit Application.");
         }
     }
 }
